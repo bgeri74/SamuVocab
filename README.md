@@ -1,6 +1,9 @@
+# This project was forked from the original SamuVocab GitHub repository(https://github.com/nbatfai/SamuVocab).
+
+
+
 # SamuVocab, exp. 7, cognitive mental organs: MPU (Mental Processing Unit), acquiring higher-order knowledge
 
-# This project was forked from the original SamuVocab GitHub repository(https://github.com/nbatfai/SamuVocab).
 
 - In order to use this project, you must have Python installed on your computer. The suggested version is 3.4.
 
