@@ -45,6 +45,10 @@ tail -f out|grep "HABITUATION MONITOR"
 tail -f out|grep "WORD" 
 ```
 
+
+##Important note:
+-In case you have problems with the compiler complaining about nullpt and such, just add the -std=c++11 flag to the CXXFLAGS in the makefile.
+
 ## Experiments with this project
 
 ### Samu (Nahshon) has learned a vocabulary of 20 words
