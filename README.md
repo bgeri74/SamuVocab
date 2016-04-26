@@ -49,8 +49,10 @@ tail -f out|grep "WORD"
 ```
 
 
-##Important note:
+##Important notes:
 -In case you have problems with the compiler complaining about nullpt and such, just add the -std=c++11 flag to the CXXFLAGS in the makefile.
+
+- If you see ALSA errors when you run the program, just ignore it, or use the program with the command of ./SamuVocab 2>out redirecting the std::err output to the out file. Don't worry about these "errors", the program operates fine even with them. They are only telling you that the configuration might be bad.
 
 ## Experiments with this project
 
