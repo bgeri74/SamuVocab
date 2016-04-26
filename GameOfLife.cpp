@@ -8,7 +8,9 @@
  * @section LICENSE
  *
  * Copyright (C) 2015, 2016 Norbert Bátfai, batfai.norbert@inf.unideb.hu
- *
+ * Copyright (C) 2016 Gergő Bogacsovics, bgeri74@gmail.com
+ * 
+ * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -50,10 +52,26 @@
 
 
 #include "GameOfLife.h"
+#include <cstdlib>
+#include <iostream> 
+#include <chrono>
 
 GameOfLife::GameOfLife ( int w, int h ) : m_w ( w ), m_h ( h )
 {
 
+  // Szavak bekérése.
+  getWords(hello);
+
+  // Megerősítő üzenet.
+  std::cout<<"------------------DEBUGGING MESSAGE-------------------"<<std::endl;
+  std::cout<<"The content of vector hello:\n"<<std::endl;
+  
+  for(int i = 0, n = hello.size(); i < n; i++){
+    std::cout<<i + 1<<". "<<hello[i];
+  }
+  
+  std::cout<<"-------------------END OF MESSAGE---------------------"<<std::endl;
+  
   lattices = new char**[2];
 
   lattices[0] = new char*[m_h];
@@ -91,6 +109,54 @@ GameOfLife::GameOfLife ( int w, int h ) : m_w ( w ), m_h ( h )
   carx = 0;
   manx = m_w/2;
   housex = 2*m_w/5;
+
+}
+
+
+// Függvény egy parancs végrehajtására.
+std::string GameOfLife::exec(const char* cmd) {
+    // Pipe létrehozása, parancs végrehajtása.
+    std::shared_ptr<FILE> pipe(popen(cmd, "r"), pclose);
+    // Ha nem sikerült a művelet, hibaüzenetet adunk vissza.
+    if (!pipe) return "ERROR";
+    
+    // Ellenkező esetben elkezdjük kinyerni az adatokat.
+    char buffer[128];
+    
+    std::string result = "";
+
+    // Amíg nem értük el a fájl vége jelet, addig olvasunk.
+    while (!feof(pipe.get())) {
+	 if (fgets(buffer, 128, pipe.get()) != NULL)
+	 result += buffer;
+    }
+    
+    return result;
+}
+
+// Függvény szavak bekérésére mikrofonról.
+// A függvény a paraméterként megkapott vektort módosítja.
+void GameOfLife::getWords(std::vector<std::string> &myVector){
+    std::string result="";
+
+    // Amíg nem érjük el az exit(kilépést jelző) szót, addig haladunk tovább.
+    while(result != "exit\n"){
+	std::cout<<"Say something.\n";
+	
+	// Szó bekérése.
+	result = exec("python3.4 main.py");
+	
+	// Ha nem sikerült a szó felismerése vagy hiba történt, jelezzük.
+	bool notOkay = (result.find("Could not understand audio") != std::string::npos || result.find("ERROR") != std::string::npos || result.find("Recog Error") != std::string::npos);
+	  
+	// Ha nem merült fel hiba, hozzáfűzzük a vektorhoz az eredményt.
+	if(!notOkay){
+	     myVector.push_back(result);
+	      std::cout<<"You said: "<<result<<std::endl;
+	  }
+	}
+	
+	myVector.pop_back(); // Az exit szót kivesszük a vektorból.
 
 }
 
@@ -1606,8 +1672,15 @@ void GameOfLife::development()
 
       if ( samuBrain->isLearned() )
         {
+	  worldsLearnt++;
           ++age;
           xx = 34;
+	  std::string word = hello[age-1];
+	  
+	  std::string command = "espeak -s 100 '" + word + "'"; 
+	  
+	  system(command.c_str());
+	  
         }
 
       int ind =  age; //( m_time/6000 ) % hello.size();
@@ -1615,8 +1688,14 @@ void GameOfLife::development()
       << age 
                << "   WORD:" << ind << hello[ind].c_str()
                << "Observation (MPU):" << samuBrain->get_foobar().c_str();
-
-      ticker ( nextLattice, hello[ind] );
+      if(worldsLearnt < hello.size())
+	ticker ( nextLattice, hello[ind] );
+      else{
+	std::string command = "espeak -s 150 'All done! Goodbye!'";
+	system(command.c_str());
+	std::exit(0);
+      }
+	
     }
 
     /*

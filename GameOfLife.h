@@ -57,13 +57,16 @@
 #include <sstream>
 #include "SamuBrain.h"
 #include <QApplication>
+#include <memory>
 
 class GameOfLife : public QThread
 {
     Q_OBJECT
 
     int m_w {40}, m_h {30};
-
+    
+    int worldsLearnt = 0; // Megtanult szavak számát jelzi.
+    
     char ***lattices;
     int latticeIndex;
     char **predictions;
@@ -99,15 +102,21 @@ class GameOfLife : public QThread
     void control_Conway ( char **, char **nextLattice );
     void control_Movie ( char **nextLattice );
 
-void ticker(char **lattice, std::string &);
+    void ticker(char **lattice, std::string &);
+    
+    // Függvény egy parancs végrehajtására.
+    std::string exec(const char* cmd);
+    
+    // Függvény szavak bekérésére mikrofonról.
+    void getWords(std::vector<std::string> &myVector);
     
     
-  std::vector<std::string> hello =  
-  {
+  std::vector<std::string> hello;
+ /* {
     // Rebecca Sitton's word list of 1200 high frequency words 
     "the",
-"of",
-"and",
+"of"};*/
+/*"and",
 "a",
 "to",
 "in",
@@ -1306,7 +1315,7 @@ void ticker(char **lattice, std::string &);
 "license",
 "recommend"
     
-  };
+  };*/
 
 
 public:

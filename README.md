@@ -1,5 +1,9 @@
 # SamuVocab, exp. 7, cognitive mental organs: MPU (Mental Processing Unit), acquiring higher-order knowledge
 
+# This project was forked from the original SamuVocab GitHub repository(https://github.com/nbatfai/SamuVocab).
+
+- In order to use this project, you must have Python installed on your computer. The suggested version is 3.4.
+
 - The agent learns and recognizes a vocabulary of 20 words. It is shown in video at https://youtu.be/KGUrMSvD4RI
 - The agent is learning and recognizing a vocabulary of 1200 words. It is shown in video at https://youtu.be/kjhJ7Q-7Ys0
 - The agent has learned and recognized the first 375 of the 1200 words then it has run out of 16 Gb memory :(
