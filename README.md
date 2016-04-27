@@ -26,6 +26,8 @@ only a vector of Samu's COP-based Q-learning instead of a matrix.
 ## Usage
 
 ```
+install python(suggested version is 3.4)
+pip3 install speechrecognition
 git clone https://github.com/nbatfai/SamuVocab.git
 cd SamuBrain/
 ~/Qt/5.5/gcc_64/bin/qmake SamuLife.pro
